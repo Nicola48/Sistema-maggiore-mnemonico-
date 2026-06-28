@@ -8,11 +8,6 @@
 <meta name="theme-color" content="#c8a96e">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
 body {
   background: #12121f;
   color: #e8e0d0;
@@ -148,6 +143,11 @@ async function sendMessage() {
     addBubble('assistant', 'Errore di connessione.');
   }
   loading = false; btn.disabled = false; input.focus();
+}
+</script>
+<script>
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('sw.js');
 }
 </script>
 </body>
