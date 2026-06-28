@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Maggiore</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #12121f;
+  color: #e8e0d0;
+  font-family: Georgia, serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+header {
+  width: 100%;
+  max-width: 680px;
+  padding: 28px 20px 0;
+  text-align: center;
+}
+h1 { font-size: 24px; font-weight: 400; color: #f0e8d8; margin-bottom: 16px; }
+.eyebrow { font-size: 10px; letter-spacing: 5px; color: #7a6845; text-transform: uppercase; margin-bottom: 8px; }
+.table-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 8px; }
+.chip { background: #1a1a30; border: 1px solid #252545; border-radius: 6px; padding: 4px 10px; font-size: 12px; color: #9080a0; }
+.chip strong { color: #c8a96e; }
+#chat { width: 100%; max-width: 680px; flex: 1; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 52vh; }
+.bubble-wrap { display: flex; }
+.bubble-wrap.user { justify-content: flex-end; }
+.bubble { max-width: 82%; padding: 12px 16px; font-size: 15px; line-height: 1.65; white-space: pre-wrap; border-radius: 18px; }
+.bubble.user { background: #c8a96e; color: #12121f; border-radius: 18px 18px 4px 18px; }
+.bubble.assistant { background: #1a1a30; color: #e8e0d0; border: 1px solid #252545; border-radius: 18px 18px 18px 4px; }
+.typing { background: #1a1a30; border: 1px solid #252545; border-radius: 18px 18px 18px 4px; padding: 14px 20px; color: #7a6845; font-size: 22px; letter-spacing: 6px; }
+#quickbtns { width: 100%; max-width: 680px; padding: 14px 16px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.qbtn { background: transparent; border: 1px solid #252545; border-radius: 20px; padding: 6px 13px; font-size: 12px; color: #706890; cursor: pointer; font-family: Georgia, serif; }
+#inputarea { width: 100%; max-width: 680px; padding: 12px 16px 28px; display: flex; gap: 10px; align-items: center; }
+#userinput { flex: 1; background: #1a1a30; border: 1px solid #252545; border-radius: 24px; padding: 13px 18px; font-size: 15px; color: #e8e0d0; outline: none; font-family: Georgia, serif; }
+#userinput::placeholder { color: #3a3a5a; }
+#sendbtn { background: #c8a96e; color: #12121f; border: none; border-radius: 50%; width: 46px; height: 46px; font-size: 18px; cursor: pointer; font-weight: bold; }
+#sendbtn:disabled { background: #252545; color: #3a3a5a; }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Mnemotecnica</div>
+  <h1>Sistema Maggiore</h1>
+  <div class="table-grid">
+    <div class="chip"><strong>0</strong> Z</div>
+    <div class="chip"><strong>1</strong> T D</div>
+    <div class="chip"><strong>2</strong> N GN</div>
+    <div class="chip"><strong>3</strong> M</div>
+    <div class="chip"><strong>4</strong> R</div>
+    <div class="chip"><strong>5</strong> L</div>
+    <div class="chip"><strong>6</strong> C G dure</div>
+    <div class="chip"><strong>7</strong> C G molli</div>
+    <div class="chip"><strong>8</strong> F V</div>
+    <div class="chip"><strong>9</strong> B P</div>
+  </div>
+</header>
+<div id="chat">
+  <div class="bubble-wrap assistant">
+    <div class="bubble assistant">Ciao! Sono il tuo assistente per il Sistema Maggiore.
+
+Puoi chiedermi:
+• "Parole con F M L" → trovo parole da memorizzare
+• "Cosa codifica BEMOLLE?" → ti dico il numero
+• "Come si codifica 1835?" → ti suggerisco parole
+
+Inizia pure!</div>
+  </div>
+</div>
+<div id="quickbtns">
+  <button class="qbtn" onclick="quickSend('Parole con B M L')">B M L</button>
+  <button class="qbtn" onclick="quickSend('Parole con F M L')">F M L</button>
+  <button class="qbtn" onclick="quickSend('Parole con T R N')">T R N</button>
+  <button class="qbtn" onclick="quickSend('Cosa codifica BEMOLLE?')">BEMOLLE?</button>
+  <button class="qbtn" onclick="quickSend('Come si codifica 1835?')">1835?</button>
+</div>
+<div id="inputarea">
+  <input id="userinput" type="text" placeholder="Es: Parole con F M L…" autocomplete="off" />
+  <button id="sendbtn" onclick="sendMessage()" disabled>→</button>
+</div>
+<script>
+const SP = `Sei un assistente esperto del Sistema Maggiore italiano. Usa SEMPRE questa tabella:
+0=Z, 1=T/D, 2=N/GN, 3=M, 4=R, 5=L, 6=C/G dure, 7=C/G molli, 8=F/V, 9=B/P
+Le vocali non contano. Le doppie contano come una sola.
+Quando chiedi parole con certe consonanti, trova parole italiane reali con ESATTAMENTE quelle consonanti in ordine.
+Esempio: B M L = BEMOLLE = 935
+Rispondi in italiano, conciso, dai 2-4 esempi reali.`;
+let history = [];
+let loading = false;
+const input = document.getElementById('userinput');
+const btn = document.getElementById('sendbtn');
+const chat = document.getElementById('chat');
+input.addEventListener('input', () => { btn.disabled = input.value.trim() === '' || loading; });
+input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
+function quickSend(t) { input.value = t; btn.disabled = false; sendMessage(); }
+function addBubble(role, text) {
+  const w = document.createElement('div');
+  w.className = `bubble-wrap ${role}`;
+  const b = document.createElement('div');
+  b.className = `bubble ${role}`;
+  b.textContent = text;
+  w.appendChild(b);
+  chat.appendChild(w);
+  chat.scrollTop = chat.scrollHeight;
+}
+function showTyping() {
+  const w = document.createElement('div');
+  w.className = 'bubble-wrap assistant';
+  w.id = 'typing';
+  const b = document.createElement('div');
+  b.className = 'typing';
+  b.textContent = '···';
+  w.appendChild(b);
+  chat.appendChild(w);
+  chat.scrollTop = chat.scrollHeight;
+}
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text || loading) return;
+  loading = true; btn.disabled = true; input.value = '';
+  addBubble('user', text);
+  history.push({ role: 'user', content: text });
+  showTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, system: SP, messages: history })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Errore.';
+    document.getElementById('typing')?.remove();
+    addBubble('assistant', reply);
+    history.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    document.getElementById('typing')?.remove();
+    addBubble('assistant', 'Errore di connessione.');
+  }
+  loading = false; btn.disabled = false; input.focus();
+}
+</script>
+</body>
+  
+</html>
