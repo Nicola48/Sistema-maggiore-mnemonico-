@@ -8,131 +8,95 @@
 <meta name="theme-color" content="#c8a96e">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: #12121f;
-  color: #e8e0d0;
-  font-family: Georgia, serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-header {.typing { background: #1a1a30; border: 1px solid #252545; border-radius: 18px 18px 18px 4px; padding: 14px 20px; color: #7a6845; font-size: 22px; letter-spacing: 6px; }
-#quickbtns { width: 100%; max-width: 680px; padding: 14px 16px 0; display: flex; gap: 8px; flex-wrap: wrap; }
-.qbtn { background: transparent; border: 1px solid #252545; border-radius: 20px; padding: 6px 13px; font-size: 12px; color: #706890; cursor: pointer; font-family: Georgia, serif; }
-#inputarea { width: 100%; max-width: 680px; padding: 12px 16px 28px; display: flex; gap: 10px; align-items: center; }
-#userinput { flex: 1; background: #1a1a30; border: 1px solid #252545; border-radius: 24px; padding: 13px 18px; font-size: 15px; color: #e8e0d0; outline: none; font-family: Georgia, serif; }
-#userinput::placeholder { color: #3a3a5a; }
-#sendbtn { background: #c8a96e; color: #12121f; border: none; border-radius: 50%; width: 46px; height: 46px; font-size: 18px; cursor: pointer; font-weight: bold; }
-#sendbtn:disabled { background: #252545; color: #3a3a5a; }
+body { background: #12121f; color: #e8e0d0; font-family: Georgia, serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+header { width: 100%; max-width: 680px; padding: 24px 20px 0; text-align: center; }
+.eyebrow { font-size: 10px; letter-spacing: 5px; color: #7a6845; text-transform: uppercase; margin-bottom: 6px; }
+h1 { font-size: 22px; font-weight: 400; color: #f0e8d8; margin-bottom: 14px; }
+.table-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 4px; }
+.chip { background: #1a1a30; border: 1px solid #252545; border-radius: 6px; padding: 3px 9px; font-size: 11px; color: #9080a0; cursor: pointer; }
+.chip strong { color: #c8a96e; font-size: 12px; }
+.tabs { display: flex; margin: 14px 16px 0; max-width: 680px; width: calc(100% - 32px); border-radius: 10px; overflow: hidden; border: 1px solid #252545; }
+.tab { flex: 1; padding: 10px; text-align: center; font-size: 12px; color: #706890; cursor: pointer; background: #1a1a30; border: none; font-family: Georgia, serif; }
+.tab.active { background: #c8a96e; color: #12121f; font-weight: 600; }
+.panel { display: none; width: 100%; max-width: 680px; padding: 14px 16px; }
+.panel.active { display: block; }
+.search-box { display: flex; gap: 8px; margin-bottom: 10px; }
+.search-box input { flex: 1; background: #1a1a30; border: 1px solid #252545; border-radius: 20px; padding: 10px 16px; font-size: 14px; color: #e8e0d0; outline: none; font-family: Georgia, serif; }
+.search-box input::placeholder { color: #3a3a5a; }
+.search-btn { background: #c8a96e; color: #12121f; border: none; border-radius: 20px; padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.hint { font-size: 12px; color: #5a5a7a; margin-bottom: 12px; line-height: 1.5; }
+.results { display: flex; flex-direction: column; gap: 10px; }
+.result-card { background: #1a1a30; border: 1px solid #252545; border-radius: 12px; padding: 14px 16px; }
+.result-word { font-size: 20px; color: #c8a96e; letter-spacing: 2px; margin-bottom: 4px; }
+.result-breakdown { font-size: 13px; color: #706890; margin-bottom: 6px; }
+.result-number { font-size: 28px; color: #f0e8d8; font-weight: 300; letter-spacing: 4px; }
+.result-desc { font-size: 12px; color: #5a5a7a; margin-top: 4px; }
+.num-input input { width: 100%; background: #1a1a30; border: 1px solid #252545; border-radius: 20px; padding: 12px 20px; font-size: 22px; color: #c8a96e; outline: none; font-family: Georgia, serif; letter-spacing: 6px; text-align: center; margin-bottom: 12px; }
+.word-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.word-tag { background: #1a1a30; border: 1px solid #252545; border-radius: 20px; padding: 6px 14px; font-size: 14px; color: #e8e0d0; cursor: pointer; }
+.num-result { background: #1a1a30; border: 1px solid #252545; border-radius: 12px; padding: 14px 16px; }
+.num-breakdown { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.digit-chip { background: #12121f; border: 1px solid #c8a96e; border-radius: 8px; padding: 6px 12px; text-align: center; }
+.digit-chip .d { font-size: 20px; color: #c8a96e; }
+.digit-chip .c { font-size: 11px; color: #9080a0; }
+.full-table { display: flex; flex-direction: column; gap: 8px; }
+.table-row { display: flex; align-items: center; background: #1a1a30; border: 1px solid #252545; border-radius: 10px; padding: 12px 14px; gap: 12px; }
+.table-num { font-size: 24px; color: #c8a96e; width: 30px; flex-shrink: 0; }
+.table-cons { font-size: 14px; color: #e8e0d0; flex: 1; }
+.table-example { font-size: 12px; color: #5a5a7a; font-style: italic; }
+.empty { text-align: center; padding: 30px; color: #3a3a5a; font-size: 14px; }
 </style>
-</head>
-<body>
+</head><body>
 <header>
   <div class="eyebrow">Mnemotecnica</div>
   <h1>Sistema Maggiore</h1>
   <div class="table-grid">
-    <div class="chip"><strong>0</strong> Z</div>
-    <div class="chip"><strong>1</strong> T D</div>
-    <div class="chip"><strong>2</strong> N GN</div>
-    <div class="chip"><strong>3</strong> M</div>
-    <div class="chip"><strong>4</strong> R</div>
-    <div class="chip"><strong>5</strong> L</div>
-    <div class="chip"><strong>6</strong> C G dure</div>
-    <div class="chip"><strong>7</strong> C G molli</div>
-    <div class="chip"><strong>8</strong> F V</div>
-    <div class="chip"><strong>9</strong> B P</div>
+    <div class="chip" onclick="chipClick(0)"><strong>0</strong> Z</div>
+    <div class="chip" onclick="chipClick(1)"><strong>1</strong> T D</div>
+    <div class="chip" onclick="chipClick(2)"><strong>2</strong> N GN</div>
+    <div class="chip" onclick="chipClick(3)"><strong>3</strong> M</div>
+    <div class="chip" onclick="chipClick(4)"><strong>4</strong> R</div>
+    <div class="chip" onclick="chipClick(5)"><strong>5</strong> L</div>
+    <div class="chip" onclick="chipClick(6)"><strong>6</strong> C G dure</div>
+    <div class="chip" onclick="chipClick(7)"><strong>7</strong> C G molli</div>
+    <div class="chip" onclick="chipClick(8)"><strong>8</strong> F V</div>
+    <div class="chip" onclick="chipClick(9)"><strong>9</strong> B P</div>
   </div>
 </header>
-<div id="chat">
-  <div class="bubble-wrap assistant">
-    <div class="bubble assistant">Ciao! Sono il tuo assistente per il Sistema Maggiore.
-
-Puoi chiedermi:
-• "Parole con F M L" → trovo parole da memorizzare
-• "Cosa codifica BEMOLLE?" → ti dico il numero
-• "Come si codifica 1835?" → ti suggerisco parole
-
-Inizia pure!</div>
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('cerca')">🔍 Parole</button>
+  <button class="tab" onclick="switchTab('numero')">🔢 Numero</button>
+  <button class="tab" onclick="switchTab('tavola')">📋 Tavola</button>
+</div>
+<div class="panel active" id="panel-cerca">
+  <p class="hint">Inserisci consonanti (es: <strong>B M L</strong>) o una parola (es: <strong>BEMOLLE</strong>)</p>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="B M L oppure BEMOLLE" oninput="onSearchInput()" onkeydown="if(event.key==='Enter')doSearch()" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <button class="search-btn" onclick="doSearch()">→</button>
   </div>
+  <div class="results" id="searchResults"></div>
 </div>
-<div id="quickbtns">
-  <button class="qbtn" onclick="quickSend('Parole con B M L')">B M L</button>
-  <button class="qbtn" onclick="quickSend('Parole con F M L')">F M L</button>
-  <button class="qbtn" onclick="quickSend('Parole con T R N')">T R N</button>
-  <button class="qbtn" onclick="quickSend('Cosa codifica BEMOLLE?')">BEMOLLE?</button>
-  <button class="qbtn" onclick="quickSend('Come si codifica 1835?')">1835?</button>
+<div class="panel" id="panel-numero">
+  <p class="hint">Inserisci un numero per trovare parole</p>
+  <div class="num-input">
+    <input type="tel" id="numInput" placeholder="1835" oninput="doNumber()" maxlength="8"/>
+  </div>
+  <div id="numResults"></div>
 </div>
-<div id="inputarea">
-  <input id="userinput" type="text" placeholder="Es: Parole con F M L…" autocomplete="off" />
-  <button id="sendbtn" onclick="sendMessage()" disabled>→</button>
-</div>
-<script>
-const SP = `Sei un assistente esperto del Sistema Maggiore italiano. Usa SEMPRE questa tabella:
-0=Z, 1=T/D, 2=N/GN, 3=M, 4=R, 5=L, 6=C/G dure, 7=C/G molli, 8=F/V, 9=B/P
-Le vocali non contano. Le doppie contano come una sola.
-Quando chiedi parole con certe consonanti, trova parole italiane reali con ESATTAMENTE quelle consonanti in ordine.
-Esempio: B M L = BEMOLLE = 935
-Rispondi in italiano, conciso, dai 2-4 esempi reali.`;
-let history = [];
-let loading = false;
-const input = document.getElementById('userinput');
-const btn = document.getElementById('sendbtn');
-const chat = document.getElementById('chat');
-input.addEventListener('input', () => { btn.disabled = input.value.trim() === '' || loading; });
-input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
-function quickSend(t) { input.value = t; btn.disabled = false; sendMessage(); }
-function addBubble(role, text) {
-  const w = document.createElement('div');
-  w.className = `bubble-wrap ${role}`;
-  const b = document.createElement('div');
-  b.className = `bubble ${role}`;
-  b.textContent = text;
-  w.appendChild(b);
-  chat.appendChild(w);
-  chat.scrollTop = chat.scrollHeight;
-}
-function showTyping() {
-  const w = document.createElement('div');
-  w.className = 'bubble-wrap assistant';
-  w.id = 'typing';
-  const b = document.createElement('div');
-  b.className = 'typing';
-  b.textContent = '···';
-  w.appendChild(b);
-  chat.appendChild(w);
-  chat.scrollTop = chat.scrollHeight;
-}
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text || loading) return;
-  loading = true; btn.disabled = true; input.value = '';
-  addBubble('user', text);
-  history.push({ role: 'user', content: text });
-  showTyping();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, system: SP, messages: history })
-    });
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'Errore.';
-    document.getElementById('typing')?.remove();
-    addBubble('assistant', reply);
-    history.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    document.getElementById('typing')?.remove();
-    addBubble('assistant', 'Errore di connessione.');
-  }
-  loading = false; btn.disabled = false; input.focus();
-}
-</script>
-<script>
-if('serviceWorker' in navigator){
-navigator.serviceWorker.register('sw.js');
-}
+<div class="panel" id="panel-tavola">
+  <div class="full-table" id="fullTable"></div>
+</div><script>
+const SYSTEM={0:{label:'Z',consonants:['z'],examples:['ZERO','ZONA','ZAINO']},1:{label:'T D',consonants:['t','d'],examples:['TETTO','DADO','TUTA']},2:{label:'N GN',consonants:['n','gn'],examples:['NINO','NONNA','GNOMO']},3:{label:'M',consonants:['m'],examples:['MAMMA','MIELE','MIMO']},4:{label:'R',consonants:['r'],examples:['RARO','RETE','ROMA']},5:{label:'L',consonants:['l'],examples:['LUNA','LIRA','LELLA']},6:{label:'C G dure',consonants:['c','g','k','q'],examples:['CANE','GARA','COCCO']},7:{label:'C G molli',consonants:['ci','ce','gi','ge'],examples:['CIBO','GELO','CECE']},8:{label:'F V',consonants:['f','v'],examples:['FAVA','VINO','FUMO']},9:{label:'B P',consonants:['b','p'],examples:['BACO','PALA','PAPA']}};
+const DB={'10':['TAZZA','TIZIO'],'11':['TETTO','DATO'],'12':['TONO','DONO','TUNA'],'13':['TEMA','DAMA','TIMO'],'14':['TERRA','TIRO','TORRE'],'15':['TELA','TALLO','DELLO'],'16':['TACCO','DUCA','TOCCO'],'17':['TACE','DIECI'],'18':['TIFA','DIVA','TUFO'],'19':['TIPO','TOPO'],'20':['NOZZE'],'21':['NODO','NOTA','NIDO'],'22':['NONNO','NINNA'],'23':['NOME','NORMA'],'24':['NERO','NORI'],'25':['NILO','NELLA'],'26':['NICO','NOKIA'],'27':['NOCI'],'28':['NEVO'],'29':['NUBE'],'30':['MOZZO','MEZZO'],'31':['MOTO','META','MODO'],'32':['MANO','MENO','MONO'],'33':['MAMMA','MIMO'],'34':['MARE','MORO','MARIO'],'35':['MELA','MULO','MOLLE','MIELE'],'36':['MAGO','MEGA'],'37':['MAGIE'],'38':['FUMO'],'39':['MAPPA'],'40':['RAZZA'],'41':['RETE','ROTA','RUOTA'],'42':['RANA','RENO'],'43':['ROMA','RAMO','RIMA'],'44':['RARO'],'45':['RULLO','REALE'],'46':['RICO','REGO'],'47':['REGIA'],'48':['RIVA'],'49':['ROBA','RAPA'],'50':['LAZZO'],'51':['LATO','LODE','LIDO'],'52':['LUNA','LENA','LINO'],'53':['LIMA','LAMA'],'54':['LIRA','LORO'],'55':['LILLO','LELLA'],'56':['LAGO','LUCA','LOGO'],'57':['LUCE'],'58':['LAVA','LEVA'],'59':['LUPA'],'60':['GAZZA','GOZZO'],'61':['CODA','GATTO'],'62':['CANE','GANO'],'63':['COMA','GAMBA'],'64':['CARO','GARA'],'65':['CALO','COLA'],'66':['COCCO','CACAO'],'67':['GIOCO'],'68':['CAVA','GUFO'],'69':['CAPO','CUPA'],'70':['CAZZA'],'71':['CETO','GETTO'],'72':['CENA','GENE'],'73':['CIMA'],'74':['CERA','CIRO'],'75':['CELO'],'76':['CECCO'],'78':['GIOVA'],'79':['CIBO'],'80':['FAZZO'],'81':['FOTO','VITA','VOTO'],'82':['FANO','VINO','VENA'],'83':['FAMA','FUMO'],'84':['FARO','VERA'],'85':['FILO','VELO','VALE'],'86':['FICO','VAGO'],'87':['FECE'],'88':['FAVA','VIVA'],'89':['FIABA'],'90':['PIZZA','POZZA'],'91':['BOTTA','PATTO'],'92':['PANE','BUNA'],'93':['PUMA','BEMO'],'94':['BARA','PARA'],'95':['PALA','POLO'],'96':['BACO','POCA'],'97':['BACI'],'98':['BAVA'],'99':['PAPA','BUBU'],'135':['TRAMELO'],'143':['TERMALE'],'314':['MOTORE'],'315':['METALLO'],'341':['MARTEDI'],'351':['MALATO'],'352':['MELONE'],'413':['RITMO'],'415':['ROTOLO'],'512':['LATINO'],'513':['LETAME'],'531':['LUMETTO'],'612':['CATENA'],'631':['COMETA'],'635':['CAMELLO'],'812':['FONTANA'],'831':['FUMETTO'],'835':['FAMOLO'],'912':['PATENA'],'931':['POMETO'],'935':['BEMOLLE'],'941':['PORTATO'],'951':['PALATO'],'1492':['COLOMBO'],'1756':['MOZART'],'1770':['BEETHOVEN'],'1810':['CHOPIN'],'1835':['BEMOLLE','FAMOLO'],'1861':['ITALIA'],'1969':['LUNA']};
+function switchTab(t){document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['cerca','numero','tavola'][i]===t));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+t).classList.add('active');}
+function chipClick(n){switchTab('numero');const i=document.getElementById('numInput');i.value+=n;doNumber();}
+function onSearchInput(){if(document.getElementById('searchInput').value.length>=2)doSearch();}
+function wordToNumber(word){const w=word.toLowerCase();const v='aeiouàèéìòùâêîôûäëïöü';const digits=[];let i=0;while(i<w.length){const ch=w[i];if(v.includes(ch)){i++;continue;}const bi=w.slice(i,i+2);if(bi==='gn'){digits.push(2);i+=2;}else if(bi==='ch'||bi==='gh'){digits.push(6);i+=2;}else if(bi==='ci'||bi==='ce'||bi==='gi'||bi==='ge'){digits.push(7);i+=2;}else{const m={'z':0,'t':1,'d':1,'n':2,'m':3,'r':4,'l':5,'c':6,'g':6,'k':6,'q':6,'j':7,'f':8,'v':8,'b':9,'p':9};if(m[ch]!==undefined){if(digits.length===0||digits[digits.length-1]!==m[ch]||w[i-1]!==ch)digits.push(m[ch]);}i++;}}return digits;}
+function doSearch(){const raw=document.getElementById('searchInput').value.trim().toUpperCase();const c=document.getElementById('searchResults');if(!raw){c.innerHTML='';return;}if(raw.includes(' ')){const parts=raw.split(/\s+/);const m={'Z':'0','T':'1','D':'1','N':'2','GN':'2','M':'3','R':'4','L':'5','C':'6','G':'6','K':'6','F':'8','V':'8','B':'9','P':'9','CI':'7','CE':'7','GI':'7','GE':'7'};const digits=parts.map(p=>m[p]||'?').join('');const words=DB[digits]||[];c.innerHTML=words.length?words.map(w=>`<div class="result-card"><div class="result-word">${w}</div><div class="result-breakdown">${raw} = ${digits}</div><div class="result-number">${digits}</div></div>`).join(''):`<div class="empty">Consonanti ${raw} = <span style="color:#c8a96e;font-size:28px">${digits}</span><br><br>Nessuna parola nel database</div>`;}else{const digits=wordToNumber(raw);const num=digits.join('');c.innerHTML=`<div class="result-card"><div class="result-word">${raw}</div><div class="result-breakdown">Consonanti → ${num}</div><div class="result-number">${num}</div><div class="result-desc">Le vocali non contano · Le doppie = una sola</div></div>`;}}
+function doNumber(){const n=document.getElementById('numInput').value.replace(/[^0-9]/g,'');const c=document.getElementById('numResults');if(!n){c.innerHTML='';return;}const words=DB[n]||[];const info=n.split('').map(d=>({d,l:SYSTEM[parseInt(d)]?.label||'?'}));c.innerHTML=`<div class="num-result"><div class="num-breakdown">${info.map(x=>`<div class="digit-chip"><div class="d">${x.d}</div><div class="c">${x.l}</div></div>`).join('')}</div>${words.length?`<div class="word-list">${words.map(w=>`<div class="word-tag">${w}</div>`).join('')}</div>`:`<div style="color:#3a3a5a;font-size:13px;margin-top:8px">Nessuna parola per ${n}</div>`}</div>`;}
+function buildTable(){document.getElementById('fullTable').innerHTML=Object.entries(SYSTEM).map(([d,{label,examples}])=>`<div class="table-row"><div class="table-num">${d}</div><div class="table-cons">${label}</div><div class="table-example">${examples.join(', ')}</div></div>`).join('');}
+buildTable();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
 </body>
-  
 </html>
